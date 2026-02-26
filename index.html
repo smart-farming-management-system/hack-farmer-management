@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -170,7 +171,7 @@ button:hover{
             <option value="customer">Customer</option>
             <option value="farmer">Farmer</option>
         </select>
-        <button onclick="handleSignIn()">Login</button>
+        <button id="but" onclick="handleSignIn()"><a id="atag">Login</a></button>
         <div class="switch">
             New user? <span onclick="showSignUp()">Sign Up</span>
         </div>
@@ -219,6 +220,11 @@ function handleSignIn(){
         alert("Please fill all fields!");
         return;
     }
+else{
+let buttom=document.getElementById('atag')
+    window.location.href="dashboard.html";
+}
+    
 }
 </script>
 </body>
