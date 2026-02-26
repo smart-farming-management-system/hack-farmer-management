@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farmer Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body {
+  background:#F4F6F5;
+  color:#333;
+}
+
+/* NAVBAR */
+.navbar {
+  height:70px;
+  background:#1B5E20;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 40px;
+  flex-wrap:wrap;
+}
+
+.nav-links a {
+  color:white;
+  text-decoration:none;
+  margin-left:20px;
+  font-size:14px;
+}
+
+/* TOP ROW */
+.top-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 40px;
+  flex-wrap:wrap;
+}
+
+.quote {
+  color:#2E7D32;
+  font-style:italic;
+  font-size:14px;
+}
+
+.admin-btn button {
+  padding:8px 15px;
+  background:#1B5E20;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+/* PENDING WORK */
+.pending-wrapper {
+  background:#ffffff;
+  padding:20px 40px;
+  margin-bottom:25px;
+  border-radius:14px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+}
+
+.pending-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+  flex-wrap:wrap;
+}
+
+.pending-title h3 {
+  font-size:16px;
+}
+
+.task-count {
+  background:#f2f2f2;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:12px;
+}
+
+.view-all {
+  text-decoration:none;
+  color:#2E7D32;
+  font-weight:500;
+  font-size:12px;
+}
+
+.pending-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+/* Task Card */
+.task-card {
+  border-radius:12px;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:100px;
+  border:1px solid rgba(0,0,0,0.05);
+}
+
+.task-top h4 {
+  font-size:14px;
+}
+
+.task-top p {
+  font-size:12px;
+}
+
+.icon {
+  font-size:18px;
+}
+
+.task-bottom {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:12px;
+  margin-top:12px;
+}
+
+.chip {
+  background:#d9d9d9;
+  padding:2px 8px;
+  border-radius:20px;
+  font-size:10px;
+}
+
+.red{background:#FDECEA;}
+.yellow{background:#FFF8E1;}
+.orange{background:#FFF3E0;}
+.green{background:#E8F5E9;}
+.progress{color:#2E7D32;font-weight:600;}
+
+/* MAIN GRID ROW 1 */
+.main-grid {
+  display:grid;
+  grid-template-columns:60% 40%;
+  gap:20px;
+  padding:0 40px;
+  margin-bottom:30px;
+}
+
+.card {
+  padding:20px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.25);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.3);
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+.crop canvas {
+  height:300px !important;
+  max-height:250px;
+}
+
+/* ROW 2: Pie + Suggested */
+.sub-grid {
+  display:grid;
+  grid-template-columns:330px auto;
+  gap:20px;
+  padding:0 40px;
+  margin-bottom:30px;
+}
+
+.pie {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  width:330px;
+  height:330px;
+}
+
+.pie canvas {
+  width:330px !important;
+  height:330px !important;
+}
+
+.suggested-crops {
+  background:#E8F5E9;
+  border:1px solid #C8E6C9;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:20px;
+  border-radius:18px;
+}
+
+.suggested-crops ul li {
+  background:#C8E6C9;
+  color:#1B5E20;
+  padding:6px 10px;
+  border-radius:12px;
+  margin-bottom:8px;
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.weather {
+  background:linear-gradient(135deg,#C8E6C9,#81C784);
+  color:#1B5E20;
+}
+
+.weather h1 {
+  font-size:36px;
+  margin:15px 0;
+}
+
+.footer {
+  background:#1B5E20;
+  color:white;
+  text-align:center;
+  padding:15px;
+}
+
+/* ================= MEDIA QUERIES ================= */
+
+/* Tablet */
+/* ================= TABLET ================= */
+@media (max-width:1024px) {
+
+
+     .navbar {
+    flex-direction: column;
+    
+    padding: 15px;
+    width:120%;
+    height: auto;
+    gap: 10px;
+  }
+
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sub-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pie {
+    width: 100%;
+    height: auto;
+  }
+
+  .pie canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+}
+
+
+/* ================= MOBILE ================= */
+@media (max-width:768px) {
+
+  .navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    
+    padding: 15px;
+    width:112%;
+    height: auto;
+    gap: 10px;
+  }
+  .top-row {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .pending-wrapper {
+    padding: 15px;
+  }
+
+  .pending-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-grid,
+  .sub-grid {
+    grid-template-columns: 1fr;
+    padding: 15px;
+  }
+
+.cardweather{
+
+height: 100%;
+width: 100%;
+}
+
+  .card {
+    padding: 15px;
+  }
+
+  .crop canvas {
+    height: 220px !important;
+  }
+
+  /* REMOVE FIXED SIZE COMPLETELY ON MOBILE */
+  .pie {
+    width: 100%;
+    height: auto;
+  }
+
+  .pie canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+}
+
+@media (max-width:400px){
+  .navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    
+    padding: 15px;
+    width:122%;
+    height: auto;
+    gap: 10px;
+  }
+
+
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div><strong>🌾 AgroManage</strong></div>
+  <div class="nav-links">
+    <a href="#">Dashboard</a>
+    <a href="#">Farmers</a>
+    <a href="#">Crops</a>
+    <a href="#">Reports</a>
+  </div>
+  <div>🔔 👤</div>
+</div>
+
+<!-- GREETING -->
+<div class="top-row">
+  <div>
+    <h2>Good Morning, Admin 🌱</h2>
+    <div class="quote">"Smart farming ensures better harvesting."</div>
+  </div>
+  <div class="admin-btn"><button>Admin Page</button></div>
+</div>
+
+<!-- PENDING WORK -->
+<div class="pending-wrapper">
+  <div class="pending-header">
+    <div class="pending-title">
+      <h3>Today's Pending Works</h3>
+      <span class="task-count">4 Tasks Pending</span>
+    </div>
+    <a href="#" class="view-all">View All →</a>
+  </div>
+  <div class="pending-grid">
+    <div class="task-card red">
+      <div class="task-top">
+        <div class="icon">⚠️</div>
+        <div><h4>Fertilizer Stock Low</h4><p>Order urea and DAP fertilizers</p></div>
+      </div>
+      <div class="task-bottom"><span>📁 Due Today</span><span class="chip">SIP</span></div>
+    </div>
+    <div class="task-card yellow">
+      <div class="task-top">
+        <div class="icon">💧</div>
+        <div><h4>Field Irrigation - East Farm</h4><p>Scheduled at 10:00 AM</p></div>
+      </div>
+      <div class="task-bottom"><span>👤 Assigned to: Rajesh</span><span class="chip">SIP</span></div>
+    </div>
+    <div class="task-card orange">
+      <div class="task-top">
+        <div class="icon">🚜</div>
+        <div><h4>Tractor Maintenance</h4><p>Oil change and check tires</p></div>
+      </div>
+      <div class="task-bottom"><span>📍 Due by 3:00 PM</span><span class="chip">SIP</span></div>
+    </div>
+    <div class="task-card green">
+      <div class="task-top">
+        <div class="icon">🌽</div>
+        <div><h4>Harvest Corn from Plot B</h4><p>Target: 1500 kg today</p></div>
+      </div>
+      <div class="task-bottom"><span class="progress">🟢 In Progress</span><span class="chip">SIP</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN GRID ROW 1 -->
+<div class="main-grid">
+  <div class="card crop"><h3>Crop Production</h3><canvas id="lineChart"></canvas></div>
+  <div class="card weather">
+    <h3>Weather Forecast</h3>
+    <h1>28°C</h1>
+    <p>Mostly Sunny</p>
+    <p>Humidity: 52%</p>
+    <p>Wind: 12 km/h</p>
+  </div>
+</div>
+
+<!-- MAIN GRID ROW 2 -->
+<div class="sub-grid">
+  <div class="card pie"><h3>Crop Yield Distribution</h3><canvas id="donutChart"></canvas></div>
+  <div class="card suggested-crops">
+    <h3>Suggested Crops for This Season</h3>
+    <ul>
+      <li>🌾 Wheat – Feb to Apr</li>
+      <li>🌽 Corn – Mar to Jun</li>
+      <li>🍅 Tomato – Mar to May</li>
+      <li>💧 Rice – Jun to Sep</li>
+    </ul>
+    <p>Recommended crops based on soil & weather conditions to maximize yield.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 AgroManage | Farmer Management System</div>
+
+<script>
+/* Line Chart */
+new Chart(document.getElementById("lineChart"),{
+  type:'line',
+  data:{
+    labels:['Jan','Feb','Mar','Apr','May'],
+    datasets:[{label:'Yield',data:[50,65,70,85,90],borderColor:'#1B5E20',fill:false}]
+  }
+});
+
+/* Donut Chart */
+new Chart(document.getElementById("donutChart"),{
+  type:'doughnut',
+  data:{
+    labels:['Wheat','Rice','Corn','Soybean'],
+    datasets:[{data:[35,25,20,20],backgroundColor:['#4CAF50','#FF9800','#2196F3','#9C27B0'],borderWidth:0}]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:true,
+    cutout:'70%',
+    plugins:{legend:{position:'bottom',labels:{padding:15,font:{size:12}}}}
+  }
+});
+</script>
+
+</body>
+</html>
