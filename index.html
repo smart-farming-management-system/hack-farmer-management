@@ -178,33 +178,47 @@ button:hover{
     </div>
 </div>
 <script>
-function showSignIn(){
+// Toggle between Sign In and Sign Up forms
+function showSignIn() {
     document.getElementById('signupForm').style.display = 'none';
     document.getElementById('signinForm').style.display = 'flex';
 }
-function showSignUp(){
+
+function showSignUp() {
     document.getElementById('signinForm').style.display = 'none';
     document.getElementById('signupForm').style.display = 'flex';
 }
-function handleSignUp(){
-    const name = document.getElementById('signupName').value;
-    const email = document.getElementById('signupEmail').value;
-    const phone = document.getElementById('signupPhone').value;
-    const pass = document.getElementById('signupPass').value;
-    const confirm = document.getElementById('signupConfirm').value;
+
+// Handle user sign-up
+function handleSignUp() {
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const phone = document.getElementById('signupPhone').value.trim();
+    const pass = document.getElementById('signupPass').value.trim();
+    const confirm = document.getElementById('signupConfirm').value.trim();
     const userType = document.getElementById('signupUserType').value;
-    if(!name || !email || !phone || !pass || !confirm || !userType){
+
+    if (!name || !email || !phone || !pass || !confirm || !userType) {
         alert("Please fill all fields!");
         return;
     }
-    if(pass !== confirm){
+    if (pass !== confirm) {
         alert("Passwords do not match!");
         return;
     }
- 
-    showSignIn();
+
+    // Save user info in localStorage
+    localStorage.setItem('loggedInName', name);
+    localStorage.setItem('loggedInType', userType);
+
+    // Pre-fill sign-in form
     document.getElementById('signinEmail').value = email;
     document.getElementById('signinUserType').value = userType;
+
+    // Switch to sign-in form
+    showSignIn();
+
+    // Clear signup fields
     document.getElementById('signupName').value = '';
     document.getElementById('signupEmail').value = '';
     document.getElementById('signupPhone').value = '';
@@ -212,19 +226,29 @@ function handleSignUp(){
     document.getElementById('signupConfirm').value = '';
     document.getElementById('signupUserType').value = '';
 }
-function handleSignIn(){
-    const email = document.getElementById('signinEmail').value;
-    const pass = document.getElementById('signinPass').value;
+
+// Handle user sign-in
+function handleSignIn() {
+    const email = document.getElementById('signinEmail').value.trim();
+    const pass = document.getElementById('signinPass').value.trim();
     const userType = document.getElementById('signinUserType').value;
-    if(!email || !pass || !userType){
+
+    if (!email || !pass || !userType) {
         alert("Please fill all fields!");
         return;
     }
-else{
-let buttom=document.getElementById('atag')
-    window.location.href="dashboard.html";
-}
-    
+
+    // Store user info in localStorage
+    let name = localStorage.getItem('loggedInName') || email.split('@')[0];
+    localStorage.setItem('loggedInName', name);
+    localStorage.setItem('loggedInType', userType);
+
+    // Redirect based on user type
+    if (userType === 'customer') {
+        window.location.href = 'customer.html';
+    } else {
+        window.location.href = 'dashboard.html';
+    }
 }
 </script>
 </body>
